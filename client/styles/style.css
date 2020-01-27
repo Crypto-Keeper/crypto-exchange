@@ -1,0 +1,39 @@
+body {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  background-color: rgb(2, 21, 40);
+  color: white;
+  font-size: 120%;
+}
+header {
+  grid-column: 1 / span 3;
+  background-color: rgb(21, 49, 74);
+  margin-bottom: 20px;
+  font-size: 150%;
+}
+button {
+  background-color: rgb(200, 200, 200);
+  color: black;
+  margin-top: 20px;
+  font-size: 130%;
+}
+#askList {
+  color: green;
+  border: 1px solid rgb(21, 49, 74);
+}
+#bidList {
+  color: red;
+  border: 1px solid rgb(21, 49, 74);
+}
+ul {
+  background-color: rgb(21, 49, 74);
+}
+h3 {
+  font-size: 150%;
+}
+input {
+  font-size: 130%;
+}
+#root > div > div {
+  margin-bottom: 0;
+}
