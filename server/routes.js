@@ -26,7 +26,11 @@ router.post('/buyMarket', cryptoController.findMarket, cryptoController.deleteMa
 
 
 // need to handle post for update limit
-router.post('/buyLimit', cryptoController.buyLimit, (req, res) => res.status(200).json());
+router.post('/buyLimit',
+  cryptoController.buyLimit,
+  cryptoController.getAsk,
+  cryptoController.getBid,
+  (req, res) => res.status(200).json(res.locals.body));
 
 
 module.exports = router;
