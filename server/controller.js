@@ -1,5 +1,8 @@
 // need to add connection to db
 const db = require('../db/crypto_db.js')
+const bcrypt = require('bcrypt');
+
+const saltRounds = 2;
 
 const cryptoController = {};
 
@@ -16,22 +19,20 @@ cryptoController.login = (req, res, next) => {
   const getUserQuery = (`SELECT username, password, usd, eth FROM accounts WHERE username = '${user}'`)
   db.query(getUserQuery)
     .then(data => {
-      console.log('here',data.rows)
-      if (!data.rows[0]) return res.send(false)
-      else if (
-        data.rows[0].password !== pass) {
-        return res.send(false)
-      }
+      if (!data.rows[0]) {return res.send(false)}
       else {
-        // TODO
-        // need to set body for user info
-        console.log(data.rows);
+        console.log('data', data.rows[0].password)
+        bcrypt.compare(pass, data.rows[0].password, function (err, result) {
+          console.log('result', result)
+          if (result === true) {
         res.locals.body = data.rows;
         next();
+          } else {
+            return res.send(false)
+          }
+        })
       }
-
     })
-
 }
 
 // signup controller
@@ -39,13 +40,15 @@ cryptoController.signup = (req, res, next) => {
   console.log('signing up!')
   const user = req.body.username
   const pass = req.body.password
-  const getCreateUser = (`INSERT INTO accounts (username,password,usd,eth) VALUES ('${user}', '${pass}', 10000, 100)`)
+
+  bcrypt.hash(pass, saltRounds,  function(err,hash) {
+  const getCreateUser = (`INSERT INTO accounts (username,password,usd,eth) VALUES ('${user}', '${hash}', 10000, 100)`)
   db.query(getCreateUser)
   .then(data => {
     next()
   }
   ) 
-
+})
 }
 // // get market
 // cryptoController.getMarket = (req, res, next) => {
