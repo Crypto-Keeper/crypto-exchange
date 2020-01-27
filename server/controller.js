@@ -12,10 +12,16 @@ cryptoController.login = (req, res, next) => {
   //TODO
   //need to send something back if not found in the db
   const user = req.body.username;
-  const getUserQuery = (`SELECT username, usd, eth FROM accounts WHERE username = '${user}'`)
+  const pass = req.body.password;
+  const getUserQuery = (`SELECT username, password, usd, eth FROM accounts WHERE username = '${user}'`)
   db.query(getUserQuery)
     .then(data => {
+      console.log('here',data.rows)
       if (!data.rows[0]) return res.send(false)
+      else if (
+        data.rows[0].password !== pass) {
+        return res.send(false)
+      }
       else {
         // TODO
         // need to set body for user info
@@ -28,7 +34,19 @@ cryptoController.login = (req, res, next) => {
 
 }
 
+// signup controller
+cryptoController.signup = (req, res, next) => {
+  console.log('signing up!')
+  const user = req.body.username
+  const pass = req.body.password
+  const getCreateUser = (`INSERT INTO accounts (username,password,usd,eth) VALUES ('${user}', '${pass}', 10000, 100)`)
+  db.query(getCreateUser)
+  .then(data => {
+    next()
+  }
+  ) 
 
+}
 // // get market
 // cryptoController.getMarket = (req, res, next) => {
 //   // add get market query here
