@@ -69,14 +69,16 @@ cryptoController.signup = (req, res, next) => {
 cryptoController.sellLimit = (req, res, next) => {
   // inserts an ask into orders
   // {username: 'Will'; rate: 1.25; amount: 1} from frontend
+  console.log('FROM SELLLIMIT MIDDLEWARE: ', req.body);
   const username = req.body.username;
   const rate = req.body.rate;
   const amount = req.body.amount;
 
-  const insertLimit = (`INSERT INTO orders (username, txn_type, rate, eth) VALUES ('${username}','BID', ${rate}, ${amount})`);
+  const insertLimit = (`INSERT INTO orders (username, txn_type, rate, eth) VALUES ('${username}','ASK', ${rate}, ${amount})`);
 
-  db.query(insertLimit)
-  next();
+  db.query(insertLimit).then(() => {
+    next();
+  })
 }
 
 cryptoController.getAsk = (req, res, next) => {
@@ -84,7 +86,8 @@ cryptoController.getAsk = (req, res, next) => {
   const getAsk = (`SELECT * FROM orders WHERE txn_type = 'ASK' ORDER BY rate ASC LIMIT 5`)
   db.query(getAsk)
     .then(data => {
-      // console.log(data.rows)
+      console.log(data.rows)
+      if (!res.locals.body) res.locals.body = [];
       res.locals.body = res.locals.body.concat(data.rows)
       next();
     })
