@@ -20,9 +20,31 @@ cryptoController.login = (req, res, next) => {
 
 }
 
+<<<<<<< HEAD
 // get market
 cryptoController.getMarket = (req, res, next) => {
   // add get market query here
+=======
+
+// // get market
+// cryptoController.getMarket = (req, res, next) => {
+//   // add get market query here
+//   // TODO 
+//   // need to sort the info in the query  
+//   const order = "ASK";
+//   const getMarketQuery = (`SELECT * FROM orders WHERE txn_type = '${order}' LIMIT 5`)
+//   db.query(getMarketQuery)
+//     .then(data => {
+//       res.locals.body = data.rows
+//       next();
+//     })
+// }
+
+
+//get limit
+cryptoController.sellLimit = (req, res, next) => {
+  // add get limit query here
+>>>>>>> dev
   // TODO 
   // need to sort the info in the query  
   const order = "ASK";
@@ -57,13 +79,13 @@ cryptoController.addLogin = (req, res, next) => {
 }
 
 // update market
-cryptoController.updateMarket = (req, res, next) => {
+cryptoController.buyMarket = (req, res, next) => {
   // insert into market
 
 }
 
 //update limit
-cryptoController.updateLimit = (req, res, next) => {
+cryptoController.buyLimit = (req, res, next) => {
   // insert into limit
 
 }
