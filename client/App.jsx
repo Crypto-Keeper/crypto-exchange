@@ -5,6 +5,7 @@ import Orderbook from './orderbook.jsx';
 import Login from './login.jsx';
 import LoginPage from './loginPage.jsx';
 // Top-level react app component container
+// Test commit Abaas.
 
 // Making use of react-router-dom in order to log the user in and take in their portfolio. Decided to make use of react hooks instead of class components.
 
@@ -21,29 +22,20 @@ function App() {
 
   // Router redirects to LoginPage.jsx when button is clicked. Displays orderbook component without portfolio otherwise.
   if (isLoggedIn) {
-    renderComponent = <Portfolio
-      isLoggedIn={isLoggedIn}
-      portfolio={portfolio}
-      asks={asks}
-      bids={bids}
-      updateLogin={updateLogin}
-      updatePortfolio={updatePortfolio}
-      updateAsks={updateAsks}
-      updateBids={updateBids}
-    />
-  } else {
+    renderComponent = <Portfolio />
+  }else{
     renderComponent = (<Route exact path="/">
-      <button type="submit">
-        <Link to="/loginPage">Login</Link>
-      </button>
-    </Route>)
+    <button type="submit">
+      <Link to="/loginPage">Login</Link>
+    </button>
+  </Route>)
   }
 
   return (
     <Router>
       {renderComponent}
       <Route exact path="/" render={() => <Orderbook asks={asks} bids={bids} />} />
-      <Route exact path="/loginPage" render={() => <LoginPage
+      <Route exact path="/loginPage" render={()=><LoginPage 
         updateLogin={updateLogin}
         updatePortfolio={updatePortfolio}
         updateBids={updateBids}
@@ -53,9 +45,9 @@ function App() {
     </Router>
     // <div>
     //   {userBox}
-    // <Orderbook asks={asks} bids={bids} />
+  // <Orderbook asks={asks} bids={bids} />
 
-    // </div>
+  // </div>
 
   );
 }

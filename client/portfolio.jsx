@@ -1,4 +1,6 @@
+
 import React, { useState } from 'react';
+// Test commit Abaas.
 
 // Portfolio must persist all aspects of state
 function Portfolio(props) {
@@ -106,7 +108,7 @@ function Portfolio(props) {
   const storeRate = (e) => {
     updateRate(e.target.value);
   }
-
+  
   return (
     <div>
       <p>Welcome to your portfolio, {username}.</p>
