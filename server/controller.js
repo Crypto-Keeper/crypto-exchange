@@ -69,7 +69,7 @@ cryptoController.getBid = (req, res, next) => {
   const getBid = (`SELECT * FROM orders WHERE txn_type = 'BID' ORDER BY rate ASC LIMIT 5`)
   db.query(getBid)
     .then(data => {
-      // console.log("date: ", data.rows)
+      console.log("date: ", data.rows)
       res.locals.body = res.locals.body.concat(data.rows)
       next()
     })
@@ -83,15 +83,26 @@ cryptoController.addLogin = (req, res, next) => {
 }
 
 // update market
-cryptoController.buyMarket = (req, res, next) => {
+cryptoController.findMarket = (req, res, next) => {
   // get the lowest Ask
   const findLowest = (`SELECT _id FROM orders WHERE txn_type = 'ASK' ORDER BY rate ASC LIMIT 1`)
   db.query(findLowest)
     .then(data => {
-      console.log("data: ", data.rows);
+      // console.log("data: ", data.rows);
+      res.locals.body = data.rows
+      // console.log(deleteLowest)
+      next();
     })
-  //delete shit 
+}
 
+cryptoController.deleteMarket = (req, res, next) => {
+  const deleteInfo = (`DELETE FROM orders WHERE _id = ${res.locals.body[0]["_id"]}`)
+  db.query(deleteInfo)
+    .then((data) => {
+      // console.log("its gone")
+      res.locals.body = data.rows;
+      next();
+    })
 }
 
 //update limit

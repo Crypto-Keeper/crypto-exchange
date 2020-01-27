@@ -18,7 +18,7 @@ router.get('/sellLimit', cryptoController.sellLimit, cryptoController.getAsk, cr
 // router.post('/login', cryptoController.addLogin, (req, res) => res.status(200).json());
 
 // need to handle post for update market
-router.post('/buyMarket', cryptoController.buyMarket, (req, res) => res.status(200).json());
+router.post('/buyMarket', cryptoController.findMarket, cryptoController.deleteMarket, cryptoController.getAsk, cryptoController.getBid, (req, res) => res.status(200).json(res.locals.body));
 
 
 // need to handle post for update limit
