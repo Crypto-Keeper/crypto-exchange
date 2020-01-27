@@ -11,7 +11,7 @@ const pool = new Pool({
 
 // INSERT INTO accounts (username,password,usd,eth) VALUES ('David','David',10000,100);
 
-// INSERT INTO orders (username,txn_type,rate,eth) VALUES ('Will','ASK',1600000.87,1);
+// INSERT INTO orders (user_id,txn_type,rate,eth) VALUES (1,'ASK',1600000.87,1);
 
 module.exports = {
   query: (text, params, callback) => {
