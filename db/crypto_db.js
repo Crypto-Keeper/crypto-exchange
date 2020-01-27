@@ -6,7 +6,6 @@ const PG_URI = 'postgres://zfvxzluy:tUjnz9ecL3dw-x-jq1-DnqzIbSzymPRI@rajje.db.el
 const pool = new Pool({
   connectionString: PG_URI
 })
-
 // insert queries
 
 // INSERT INTO accounts (username,password,usd,eth) VALUES ('David','David',10000,100);
