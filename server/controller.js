@@ -3,29 +3,31 @@ const db = require('../db/crypto_db.js')
 
 const cryptoController = {};
 
-// Test commit Abaas.
 
 // login controller
 cryptoController.login = (req, res, next) => {
+  console.log('server got request');
+  console.log(req.body);
   // add login query here
   //TODO
   //need to send something back if not found in the db
-  const user = "Will";
-  const getUserQuery = (`SELECT * FROM accounts WHERE username = '${user}'`)
+  const user = req.body.username;
+  const getUserQuery = (`SELECT username, usd, eth FROM accounts WHERE username = '${user}'`)
   db.query(getUserQuery)
     .then(data => {
-      // console.log(data.rows[0])
-      res.locals.body = data.rows[0]
-      next();
+      if (!data.rows[0]) return res.send(false)
+      else {
+        // TODO
+        // need to set body for user info
+        console.log(data.rows);
+        res.locals.body = data.rows;
+        next();
+      }
+
     })
 
 }
 
-<<<<<<< HEAD
-// get market
-cryptoController.getMarket = (req, res, next) => {
-  // add get market query here
-=======
 
 // // get market
 // cryptoController.getMarket = (req, res, next) => {
@@ -45,30 +47,31 @@ cryptoController.getMarket = (req, res, next) => {
 //get limit
 cryptoController.sellLimit = (req, res, next) => {
   // add get limit query here
->>>>>>> dev
   // TODO 
-  // need to sort the info in the query  
-  const order = "ASK";
-  const getMarketQuery = (`SELECT * FROM orders WHERE txn_type = '${order}' LIMIT 5`)
-  db.query(getMarketQuery)
+  // need to change the hard code of addLimit
+  const addLimit = ['Will', 1.25, 1]
+  const insertLimit = (`INSERT INTO orders (username, txn_type, rate, eth) VALUES ('${addLimit[0]}','BID', ${addLimit[1]}, ${addLimit[2]})`);
+  db.query(insertLimit)
+  next();
+}
+
+cryptoController.getAsk = (req, res, next) => {
+  const getAsk = (`SELECT * FROM orders WHERE txn_type = 'ASK' ORDER BY rate DESC LIMIT 5`)
+  db.query(getAsk)
     .then(data => {
-      res.locals.body = data.rows
+      console.log(data.rows)
+      res.locals.body = res.locals.body.concat(data.rows)
       next();
     })
 }
 
-
-//get limit
-cryptoController.getLimit = (req, res, next) => {
-  // add get limit query here
-  // TODO 
-  // need to sort the info in the query  
-  const order = "BID";
-  const getMarketQuery = (`SELECT * FROM orders WHERE txn_type = '${order}' LIMIT 5`)
-  db.query(getMarketQuery)
+cryptoController.getBid = (req, res, next) => {
+  const getBid = (`SELECT * FROM orders WHERE txn_type = 'BID' ORDER BY rate ASC LIMIT 5`)
+  db.query(getBid)
     .then(data => {
-      res.locals.body = data.rows
-      next();
+      // console.log("date: ", data.rows)
+      res.locals.body = res.locals.body.concat(data.rows)
+      next()
     })
 
 }
@@ -81,13 +84,20 @@ cryptoController.addLogin = (req, res, next) => {
 
 // update market
 cryptoController.buyMarket = (req, res, next) => {
-  // insert into market
+  // get the lowest Ask
+  const findLowest = (`SELECT _id FROM orders WHERE txn_type = 'ASK' ORDER BY rate ASC LIMIT 1`)
+  db.query(findLowest)
+    .then(data => {
+      console.log("data: ", data.rows);
+    })
+  //delete shit 
 
 }
 
 //update limit
 cryptoController.buyLimit = (req, res, next) => {
   // insert into limit
+
 
 }
 
