@@ -7,6 +7,10 @@ const router = express.Router();
 // login router 
 router.post('/login', cryptoController.login, cryptoController.getAsk, cryptoController.getBid, (req, res) => res.status(200).json(res.locals));
 
+
+// signup router
+router.post('/signup', cryptoController.signup, cryptoController.login, cryptoController.getAsk, cryptoController.getBid,(req, res) => res.status(200).json(res.locals));
+
 // market router
 // router.get('/market', cryptoController.getMarket, (req, res) => res.status(200).json(res.locals.body));
 
