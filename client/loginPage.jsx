@@ -4,6 +4,7 @@ import { Redirect } from 'react-router';
 
 import Orderbook from './orderbook.jsx';
 import { Portfolio } from './portfolio.jsx';
+import "./styles/style.css"
 
 
 // Login Screen: currently takes only username which gets stored in
@@ -19,52 +20,44 @@ function LoginPage(props) {
   // const [asks, updateAsks] = useState([5, 5, 5, 5, 3]); // 5 latest asks
   // const [bids, updateBids] = useState([2, 2, 2, 2, 1]); // 5 latest bids
   // const [portfolio, updatePortfolio] = useState(['user', 10000, 0]); // user, usd, eth balances
-  const [username, updateUsername] = useState('');
 
   const [success, updateSuccess] = useState(false);
 
 
   const handleClick = () => {
     // Fetch to server with username
-    const loginPostBody = {
-      username
-    };
+    // const postObj = {
+    //   method: "POST",
+    //   headers: {
+    //     "content-type": "application/json"
+    //   },
+    //   body: {
+
+    //   }
+    // };
 
 
-    fetch("/login", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(loginPostBody)
-    })
+    fetch("/login")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-
-        // Response should be boolean false if invalid username
-        if (!data) {
-          alert('Enter a valid username');
-          return;
-        }
         const { updateLogin, updatePortfolio, updateBids, updateAsks } = props;
-        const { username, usd, eth } = data.body[0];
-        const asks = data.body.slice(1, 6).map((ask) => [ask.rate]);
-        const bids = data.body.slice(6).map((bid) => [bid.rate]);
-
+        const { username, usd, eth } = data.body;
+        // destructure asks and bids as well
         updatePortfolio([username, usd, eth]);
-        updateAsks(asks);
-        updateBids(bids);
-
+        //update asks and bids as well
+        
         updateLogin(true);
-        updateSuccess(true); // should only occur if user logged in
+        updateSuccess(true);
       })
-      .catch((err) => console.log(err));
+    // Upon successful response
+
+    // updateAsks()
+    // updateBids()
+    // updateLogin(true);
   };
 
   const storeUsername = (e) => {
-    updateUsername(e.target.value);
-    console.log(username);
+    username = e.target.value;
   };
 
   let conditionalRenders;
@@ -77,9 +70,9 @@ function LoginPage(props) {
 
 
   // if !success
-  // render the form
+    // render the form
   // else
-  // render a redirect
+    // render a redirect
   if (success) {
     return <Redirect to="/" />;
   }
