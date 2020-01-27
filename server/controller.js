@@ -45,7 +45,7 @@ cryptoController.login = (req, res, next) => {
 
 
 //get limit
-cryptoController.addLimit = (req, res, next) => {
+cryptoController.sellLimit = (req, res, next) => {
   // add get limit query here
   // TODO 
   // need to change the hard code of addLimit
@@ -83,14 +83,14 @@ cryptoController.addLogin = (req, res, next) => {
 }
 
 // update market
-cryptoController.updateMarket = (req, res, next) => {
+cryptoController.buyMarket = (req, res, next) => {
   // insert into market
   //delete shit 
 
 }
 
 //update limit
-cryptoController.updateLimit = (req, res, next) => {
+cryptoController.buyLimit = (req, res, next) => {
   // insert into limit
 
 
