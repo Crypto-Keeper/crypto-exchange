@@ -19,14 +19,14 @@ cryptoController.login = (req, res, next) => {
   const getUserQuery = (`SELECT username, password, usd, eth FROM accounts WHERE username = '${user}'`)
   db.query(getUserQuery)
     .then(data => {
-      if (!data.rows[0]) {return res.send(false)}
+      if (!data.rows[0]) { return res.send(false) }
       else {
-        console.log('data', data.rows[0].password)
+        // console.log('data', data.rows[0].password)
         bcrypt.compare(pass, data.rows[0].password, function (err, result) {
-          console.log('result', result)
+          // console.log('result', result)
           if (result === true) {
-        res.locals.body = data.rows;
-        next();
+            res.locals.body = data.rows;
+            next();
           } else {
             return res.send(false)
           }
@@ -41,14 +41,14 @@ cryptoController.signup = (req, res, next) => {
   const user = req.body.username
   const pass = req.body.password
 
-  bcrypt.hash(pass, saltRounds,  function(err,hash) {
-  const getCreateUser = (`INSERT INTO accounts (username,password,usd,eth) VALUES ('${user}', '${hash}', 10000, 100)`)
-  db.query(getCreateUser)
-  .then(data => {
-    next()
-  }
-  ) 
-})
+  bcrypt.hash(pass, saltRounds, function (err, hash) {
+    const getCreateUser = (`INSERT INTO accounts (username,password,usd,eth) VALUES ('${user}', '${hash}', 10000, 100)`)
+    db.query(getCreateUser)
+      .then(data => {
+        next()
+      }
+      )
+  })
 }
 // // get market
 // cryptoController.getMarket = (req, res, next) => {
@@ -98,7 +98,7 @@ cryptoController.getBid = (req, res, next) => {
   const getBid = (`SELECT * FROM orders WHERE txn_type = 'BID' ORDER BY rate DESC LIMIT 5`)
   db.query(getBid)
     .then(data => {
-      console.log("date: ", data.rows)
+      // console.log("date: ", data.rows)
       res.locals.body = res.locals.body.concat(data.rows)
       next()
     })
@@ -114,7 +114,7 @@ cryptoController.addLogin = (req, res, next) => {
 // update market
 cryptoController.findMarket = (req, res, next) => {
   // get the lowest Ask
-  const findLowest = (`SELECT _id FROM orders WHERE txn_type = 'ASK' ORDER BY rate ASC LIMIT 1`)
+  const findLowest = (`SELECT _id, username, rate, eth FROM orders WHERE txn_type = 'ASK' ORDER BY rate ASC LIMIT 1`)
   db.query(findLowest)
     .then(data => {
       // console.log("data: ", data.rows);
@@ -129,6 +129,33 @@ cryptoController.deleteMarket = (req, res, next) => {
   db.query(deleteInfo)
     .then((data) => {
       // console.log("its gone")
+      res.locals.body = res.locals.body;
+      next();
+    })
+}
+
+// TODO
+// need to update profile of the person that sold it
+// need to update the profile of the person that bought it
+cryptoController.updateProfile = (req, res, next) => {
+  // console.log('this is rate', res.locals.body[0]['rate'])
+  const rate = res.locals.body[0]['rate'];
+  const rateSlice = rate.slice(1)
+
+  const updateSell = (`UPDATE accounts SET usd = usd + CAST(${rateSlice} AS money), eth = eth - ${res.locals.body[0]['eth']} WHERE username = '${res.locals.body[0]['username']}'`)
+  const updateBuy = (`UPDATE accounts SET usd = usd - CAST(${rateSlice} AS money), eth = eth + ${res.locals.body[0]['eth']} WHERE username = '${req.body.username}'`)
+  Promise.all([db.query(updateSell), db.query(updateBuy)])
+    .then(() => {
+      res.locals.body = req.body.username;
+      next();
+    })
+}
+
+cryptoController.getProfile = (req, res, next) => {
+  console.log(res.locals.body)
+  const getProfile = (`SELECT * FROM accounts WHERE username = '${res.locals.body}'`)
+  db.query(getProfile)
+    .then(data => {
       res.locals.body = data.rows;
       next();
     })
