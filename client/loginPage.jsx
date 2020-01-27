@@ -20,23 +20,25 @@ function LoginPage(props) {
   // const [bids, updateBids] = useState([2, 2, 2, 2, 1]); // 5 latest bids
   // const [portfolio, updatePortfolio] = useState(['user', 10000, 0]); // user, usd, eth balances
   const [username, updateUsername] = useState('');
+  const [password, updatePassword] = useState('');
 
   const [success, updateSuccess] = useState(false);
 
 
-  const handleClick = () => {
+  const handleLogin = () => {
+    console.log(username, password);
     // Fetch to server with username
     const loginPostBody = {
-      username
+      username,
+      password,
     };
 
-
-    fetch("/login", {
-      method: "POST",
+    fetch('/login', {
+      method: 'POST',
       headers: {
-        "content-type": "application/json"
+        'content-type': 'application/json',
       },
-      body: JSON.stringify(loginPostBody)
+      body: JSON.stringify(loginPostBody),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -47,7 +49,9 @@ function LoginPage(props) {
           alert('Enter a valid username');
           return;
         }
-        const { updateLogin, updatePortfolio, updateBids, updateAsks } = props;
+        const {
+          updateLogin, updatePortfolio, updateBids, updateAsks,
+        } = props;
         const { username, usd, eth } = data.body[0];
         const asks = data.body.slice(1, 6).map((ask) => [ask.rate]);
         const bids = data.body.slice(6).map((bid) => [bid.rate]);
@@ -62,44 +66,66 @@ function LoginPage(props) {
       .catch((err) => console.log(err));
   };
 
-  const storeUsername = (e) => {
-    updateUsername(e.target.value);
-    console.log(username);
+  const handleSignup = () => {
+    console.log(username, password);
+    // Fetch to server with username
+    const signupObj = {
+      username,
+      password,
+    };
+
+    fetch('/signup', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(signupObj),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+
+        // Response should be boolean false if invalid username
+        if (!data) {
+          alert('Enter a valid username');
+          return;
+        }
+        const {
+          updateLogin, updatePortfolio, updateBids, updateAsks,
+        } = props;
+        const { username, usd, eth } = data.body[0];
+        const asks = data.body.slice(1, 6).map((ask) => [ask.rate]);
+        const bids = data.body.slice(6).map((bid) => [bid.rate]);
+
+        updatePortfolio([username, usd, eth]);
+        updateAsks(asks);
+        updateBids(bids);
+
+        updateLogin(true);
+        updateSuccess(true); // should only occur if user logged in
+      })
+      .catch((err) => console.log(err));
+
   };
 
-  let conditionalRenders;
+  const storeUsername = (e) => {
+    updateUsername(e.target.value);
+  };
 
-  // if (isLoggedIn) {
-  //   conditionalRenders = <Redirect to="/" />;
-  // } else {
-  //   conditionalRenders = <h1>Provide a valid log in</h1>;
-  // }
+  const storePassword = (e) => {
+    updatePassword(e.target.value);
+  };
 
-
-  // if !success
-  // render the form
-  // else
-  // render a redirect
   if (success) {
     return <Redirect to="/" />;
   }
 
   return (
-    // <Redirect to="/" />
     <div>
       <input type="text" onChange={storeUsername} placeholder="username" />
-      <button type="submit" onClick={handleClick}>Login</button>
-      {/* {conditionalRenders} */}
-      <Router>
-        {/* <Route exact path="/loginPage">
-          <div>LoginPage</div>
-          <button type="submit">
-            <Link to="/">To Orderbook</Link>
-          </button>
-        </Route> */}
-        {/* <Route exact path="/" render={() => <Orderbook asks={asks} bids={bids} />} />
-        <Route exact path="/" render={() => <Portfolio portfolio={portfolio} />} /> */}
-      </Router>
+      <input type="text" onChange={storePassword} placeholder="password" />
+      <button type="submit" onClick={handleLogin}>Login</button>
+      <button type="submit" onClick={handleSignup}>Signup</button>
     </div>
   );
 }
