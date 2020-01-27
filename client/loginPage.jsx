@@ -53,7 +53,7 @@ function LoginPage(props) {
           updateLogin, updatePortfolio, updateBids, updateAsks,
         } = props;
         const { username, usd, eth } = data.body[0];
-        const asks = data.body.slice(1, 6).map((ask) => [ask.rate]);
+        const asks = data.body.slice(1, 6).reverse().map((ask) => [ask.rate]);
         const bids = data.body.slice(6).map((bid) => [bid.rate]);
 
         updatePortfolio([username, usd, eth]);

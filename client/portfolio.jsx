@@ -13,7 +13,7 @@ function Portfolio(props) {
     updateBids,
     updateChart
   } = props;
-  const [username, usd, eth] = portfolio;
+  let [username, usd, eth] = portfolio;
 
   const [amount, updateAmount] = useState(0);
   const [rate, updateRate] = useState(0);
@@ -32,7 +32,11 @@ function Portfolio(props) {
   const handleMarketBuy = () => {
     // Deny order if user does not have funds
 
-    const price = asks[4][0]; // market buy always made at lowest Ask
+    let price = asks[4][0];
+    price = Number(price.slice(1)); // market buy always made at lowest Ask
+    usd = Number(usd.slice(1).split(',').join(''));
+    console.log(typeof price, 'price: ', price);
+    console.log(typeof usd, 'usd: ', usd);
     if (price > usd) {
       return alert("You do not have enough USD");
     }
@@ -41,21 +45,35 @@ function Portfolio(props) {
     const buyObj = {
       username,
       amount,
-      price
+      price,
     };
-    // fetch(/* route */)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     // updateState(portfolio, asks, bids)
+    fetch('/buyMarket', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(buyObj),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // const { username, usd, eth } = data.body[0];
+        console.log(data);
+        const newAsks = data.slice(0, 5).reverse().map((ask) => [ask.rate]);
+        const newBids = data.slice(5).map((bid) => [bid.rate]);
 
-    //   })
-    //   .catch((err) => console.log(err));
+        // updateState(portfolio, asks, bids);
+        // updatePortfolio([username, usd, eth]); // duplicate names in upper scope
+        updateAsks(newAsks);
+        updateBids(newBids);
+      })
+      .catch((err) => console.log(err));
+
     updateChart(chart => {
       let newChart = [];
       for (let el of chart) {
         newChart.push(el);
       }
-      newChart.push(Number(price.slice(1)));
+      newChart.push(price);
       console.log(newChart);
       return newChart;
     });
@@ -104,16 +122,29 @@ function Portfolio(props) {
     const askObj = {
       username,
       amount,
-      rate
+      rate,
     };
     // send post request
-    // fetch(/* route */)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     // updateState(portfolio, asks, bids)
+    fetch('/sellLimit', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(askObj),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // const { username, usd, eth } = data.body[0];
+        console.log(data);
+        const newAsks = data.slice(0, 5).reverse().map((ask) => [ask.rate]);
+        const newBids = data.slice(5).map((bid) => [bid.rate]);
 
-    //   })
-    //   .catch((err) => console.log(err));
+        // updateState(portfolio, asks, bids);
+        // updatePortfolio([username, usd, eth]); // duplicate names in upper scope
+        updateAsks(newAsks);
+        updateBids(newBids);
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleLimitBid = () => {};
