@@ -1,7 +1,7 @@
 import React from "react";
 
 const data = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  labels: ["January", "February", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
   datasets: [
     {
       label: "My First dataset",
