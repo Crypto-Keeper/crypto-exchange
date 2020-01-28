@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Route, Link, BrowserRouter as Router } from "react-router-dom";
 import Portfolio from "./portfolio.jsx";
 import Orderbook from "./orderbook.jsx";
-import Login from "./login.jsx";
 import LoginPage from "./loginPage.jsx";
 // Top-level react app component container
 
-// Making use of react-router-dom in order to log the user in and take in their portfolio. Decided to make use of react hooks instead of class components.
+// Making use of react-router-dom in order to log the user in and take in their portfolio.
+// Decided to make use of react hooks instead of class components.
 
 function App() {
   // This is similar to having state in a React class component.
@@ -65,13 +65,7 @@ function App() {
           />
         )}
       />
-      {/* <Route path='/' component={OrderBook} /> */}
     </Router>
-    // <div>
-    //   {userBox}
-    // <Orderbook asks={asks} bids={bids} />
-
-    // </div>
   );
 }
 

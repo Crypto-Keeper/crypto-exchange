@@ -6,24 +6,23 @@ import Orderbook from './orderbook.jsx';
 import { Portfolio } from './portfolio.jsx';
 
 
-// Login Screen: currently takes only username which gets stored in
-// database as unique key for account information
+// Login Screen: takes username and password; bcrypt for back-end auth
 
-// Eventually to include password hashing and OAuth
+// Eventually to include OAuth
 
 // User tries to login and is verified against the database.
 // If successful, user is rerouted back to orderbook with their portfolio displayed.
 
 function LoginPage(props) {
-  // const [isLoggedIn, updateLogin] = useState(false);
-  // const [asks, updateAsks] = useState([5, 5, 5, 5, 3]); // 5 latest asks
-  // const [bids, updateBids] = useState([2, 2, 2, 2, 1]); // 5 latest bids
-  // const [portfolio, updatePortfolio] = useState(['user', 10000, 0]); // user, usd, eth balances
+  // Local state for username, password, and conditional render boolean
   const [username, updateUsername] = useState('');
   const [password, updatePassword] = useState('');
-
   const [success, updateSuccess] = useState(false);
 
+  // Destructure props
+  const {
+    updateLogin, updatePortfolio, updateBids, updateAsks,
+  } = props;
 
   const handleLogin = () => {
     console.log(username, password);
@@ -42,16 +41,13 @@ function LoginPage(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
 
         // Response should be boolean false if invalid username
         if (!data) {
           alert('Enter a valid username');
           return;
         }
-        const {
-          updateLogin, updatePortfolio, updateBids, updateAsks,
-        } = props;
+
         const { username, usd, eth } = data.body[0];
         const asks = data.body.slice(1, 6).reverse().map((ask) => [ask.rate]);
         const bids = data.body.slice(6).map((bid) => [bid.rate]);
@@ -61,14 +57,14 @@ function LoginPage(props) {
         updateBids(bids);
 
         updateLogin(true);
-        updateSuccess(true); // should only occur if user logged in
+        updateSuccess(true);
       })
       .catch((err) => console.log(err));
   };
 
   const handleSignup = () => {
     console.log(username, password);
-    // Fetch to server with username
+    // Fetch to server with username and password
     const signupObj = {
       username,
       password,
@@ -90,9 +86,7 @@ function LoginPage(props) {
           alert('Enter a valid username');
           return;
         }
-        const {
-          updateLogin, updatePortfolio, updateBids, updateAsks,
-        } = props;
+
         const { usd, eth } = data.body[0];
         const newUsername = data.body[0].username;
         const asks = data.body.slice(1, 6).reverse().map((ask) => [ask.rate]);
@@ -103,7 +97,7 @@ function LoginPage(props) {
         updateBids(bids);
 
         updateLogin(true);
-        updateSuccess(true); // should only occur if user logged in
+        updateSuccess(true);
       })
       .catch((err) => console.log(err));
 
