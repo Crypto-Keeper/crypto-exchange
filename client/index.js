@@ -1,11 +1,9 @@
-import React from "react";
-import { render } from "react-dom";
-import "./styles/style.css";
+import React from 'react';
+import { render } from 'react-dom';
+import './styles/style.css';
 
-import App from "./App.jsx";
+import App from './App.jsx';
 
-// Hook in our REact to a div component in the HTML page
+// Hook in our React to a div component in the HTML page
 
 render(<App />, document.getElementById('root'));
-
-// Test commit
