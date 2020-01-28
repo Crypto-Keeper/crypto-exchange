@@ -80,7 +80,7 @@ cryptoController.sellLimit = (req, res, next) => {
     next();
   })
 }
-
+//gets the updated ask
 cryptoController.getAsk = (req, res, next) => {
   // get 5 lastest prices people are trying to sell at
   const getAsk = (`SELECT * FROM orders WHERE txn_type = 'ASK' ORDER BY rate ASC LIMIT 5`)
@@ -92,7 +92,7 @@ cryptoController.getAsk = (req, res, next) => {
       next();
     })
 }
-
+// gets the updated bid
 cryptoController.getBid = (req, res, next) => {
   // get 5 lastest prices people are trying to buy at
   const getBid = (`SELECT * FROM orders WHERE txn_type = 'BID' ORDER BY rate DESC LIMIT 5`)
@@ -105,13 +105,16 @@ cryptoController.getBid = (req, res, next) => {
 
 }
 
-
+//TODO 
+/*
+THIS DOES NOTHING!!!!
+*/
 // update user
 cryptoController.addLogin = (req, res, next) => {
   // insert new user 
 }
 
-// update market
+// looks up the lowest asking price 
 cryptoController.findMarket = (req, res, next) => {
   // get the lowest Ask
   const findLowest = (`SELECT _id, username, rate, eth FROM orders WHERE txn_type = 'ASK' ORDER BY rate ASC LIMIT 1`)
@@ -124,6 +127,7 @@ cryptoController.findMarket = (req, res, next) => {
     })
 }
 
+// deletes the order 
 cryptoController.deleteMarket = (req, res, next) => {
   const deleteInfo = (`DELETE FROM orders WHERE _id = ${res.locals.body[0]["_id"]}`)
   db.query(deleteInfo)
@@ -134,9 +138,7 @@ cryptoController.deleteMarket = (req, res, next) => {
     })
 }
 
-// TODO
-// need to update profile of the person that sold it
-// need to update the profile of the person that bought it
+// updates the profile during a sell and buy 
 cryptoController.updateProfile = (req, res, next) => {
   // console.log('this is rate', res.locals.body[0]['rate'])
   const rate = res.locals.body[0]['rate'];
@@ -150,7 +152,7 @@ cryptoController.updateProfile = (req, res, next) => {
       next();
     })
 }
-
+// gets the updated profile and sends it back
 cryptoController.getProfile = (req, res, next) => {
   console.log(res.locals.body)
   const getProfile = (`SELECT * FROM accounts WHERE username = '${res.locals.body}'`)
