@@ -15,7 +15,7 @@ router.post('/signup', cryptoController.signup, cryptoController.login, cryptoCo
 // router.get('/market', cryptoController.getMarket, (req, res) => res.status(200).json(res.locals.body));
 
 // add limit
-router.post('/sellLimit', cryptoController.sellLimit, cryptoController.getAsk, cryptoController.getBid, (req, res) => res.status(200).json(res.locals.body));
+router.post('/sellLimit', cryptoController.sellLimit, cryptoController.getProfile, cryptoController.getAsk, cryptoController.getBid, (req, res) => res.status(200).json(res.locals.body));
 
 
 //need to handle post for update user

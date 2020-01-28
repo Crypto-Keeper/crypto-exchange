@@ -20,7 +20,7 @@ function Orderbook(props) {
     }
   }
   const data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: ["January", "February", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
     datasets: [
       {
         label: "Price Chart",

@@ -56,13 +56,13 @@ function Portfolio(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        // const { username, usd, eth } = data.body[0];
+        const { username, usd, eth } = data[0];
         console.log(data);
-        const newAsks = data.slice(0, 5).reverse().map((ask) => [ask.rate]);
-        const newBids = data.slice(5).map((bid) => [bid.rate]);
+        const newAsks = data.slice(1, 6).reverse().map((ask) => [ask.rate]);
+        const newBids = data.slice(6).map((bid) => [bid.rate]);
 
         // updateState(portfolio, asks, bids);
-        // updatePortfolio([username, usd, eth]); // duplicate names in upper scope
+        updatePortfolio([username, usd, eth]); // duplicate names in upper scope
         updateAsks(newAsks);
         updateBids(newBids);
       })
@@ -134,7 +134,7 @@ function Portfolio(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        // const { username, usd, eth } = data.body[0];
+        // const { username, usd, eth } = data[0];
         console.log(data);
         const newAsks = data.slice(0, 5).reverse().map((ask) => [ask.rate]);
         const newBids = data.slice(5).map((bid) => [bid.rate]);
